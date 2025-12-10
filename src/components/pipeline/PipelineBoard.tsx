@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Plus } from "lucide-react";
 import { PIPELINE_STAGES, MOCK_DEALS, Deal } from "./data";
 import { DealCard } from "./DealCard";
@@ -8,6 +8,27 @@ import { cn } from "@/lib/utils";
 
 export function PipelineBoard() {
     const [deals, setDeals] = useState<Deal[]>(MOCK_DEALS);
+    const [isLoaded, setIsLoaded] = useState(false);
+
+    // Load from LocalStorage on client mount
+    useEffect(() => {
+        const saved = localStorage.getItem("pipeline-deals");
+        if (saved) {
+            try {
+                setDeals(JSON.parse(saved));
+            } catch (e) {
+                console.error("Failed to load deals", e);
+            }
+        }
+        setIsLoaded(true);
+    }, []);
+
+    // Save to LocalStorage on change
+    useEffect(() => {
+        if (isLoaded) {
+            localStorage.setItem("pipeline-deals", JSON.stringify(deals));
+        }
+    }, [deals, isLoaded]);
 
     const handleAddDeal = (stageId: string) => {
         const newDeal: Deal = {
