@@ -44,6 +44,32 @@ export function PipelineBoard() {
         setDeals([...deals, newDeal]);
     };
 
+    const handleDeleteDeal = (id: string) => {
+        if (confirm("Are you sure you want to delete this deal?")) {
+            setDeals(deals.filter(d => d.id !== id));
+        }
+    };
+
+    const handleEditDeal = (deal: Deal) => {
+        const newTitle = prompt("Edit Deal Title:", deal.title);
+        if (newTitle === null) return; // Cancelled
+
+        const newValueStr = prompt("Edit Deal Value ($):", deal.value.toString());
+        if (newValueStr === null) return; // Cancelled
+
+        const newValue = parseInt(newValueStr);
+        if (isNaN(newValue)) {
+            alert("Invalid value entered");
+            return;
+        }
+
+        setDeals(deals.map(d =>
+            d.id === deal.id
+                ? { ...d, title: newTitle || d.title, value: newValue }
+                : d
+        ));
+    };
+
     return (
         <div className="h-[calc(100vh-12rem)] overflow-x-auto pb-4">
             <div className="flex gap-6 min-w-max px-1 h-full">
@@ -70,7 +96,12 @@ export function PipelineBoard() {
                             {/* Column Content */}
                             <div className="flex-1 rounded-2xl bg-muted/30 border border-border/40 p-3 space-y-3 overflow-y-auto custom-scrollbar">
                                 {stageDeals.map((deal) => (
-                                    <DealCard key={deal.id} deal={deal} />
+                                    <DealCard
+                                        key={deal.id}
+                                        deal={deal}
+                                        onEdit={handleEditDeal}
+                                        onDelete={handleDeleteDeal}
+                                    />
                                 ))}
 
                                 {/* Add New Button */}
