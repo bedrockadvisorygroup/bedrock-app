@@ -1,16 +1,33 @@
 "use client";
 
+import { useState } from "react";
 import { Plus } from "lucide-react";
-import { PIPELINE_STAGES, MOCK_DEALS } from "./data";
+import { PIPELINE_STAGES, MOCK_DEALS, Deal } from "./data";
 import { DealCard } from "./DealCard";
 import { cn } from "@/lib/utils";
 
 export function PipelineBoard() {
+    const [deals, setDeals] = useState<Deal[]>(MOCK_DEALS);
+
+    const handleAddDeal = (stageId: string) => {
+        const newDeal: Deal = {
+            id: Math.random().toString(36).substr(2, 9),
+            title: "New Potential Deal",
+            company: "New Client Ltd",
+            value: Math.floor(Math.random() * 50000) + 10000,
+            stage: stageId as any,
+            owner: "You",
+            dueDate: new Date().toISOString().split('T')[0],
+            priority: "medium",
+        };
+        setDeals([...deals, newDeal]);
+    };
+
     return (
         <div className="h-[calc(100vh-12rem)] overflow-x-auto pb-4">
             <div className="flex gap-6 min-w-max px-1 h-full">
                 {PIPELINE_STAGES.map((stage) => {
-                    const stageDeals = MOCK_DEALS.filter((deal) => deal.stage === stage.id);
+                    const stageDeals = deals.filter((deal) => deal.stage === stage.id);
                     const totalValue = stageDeals.reduce((acc, deal) => acc + deal.value, 0);
 
                     return (
@@ -36,7 +53,10 @@ export function PipelineBoard() {
                                 ))}
 
                                 {/* Add New Button */}
-                                <button className="w-full py-2.5 rounded-xl border border-dashed border-border text-muted-foreground text-sm font-medium hover:bg-muted/50 hover:text-foreground hover:border-primary/30 transition-all flex items-center justify-center gap-2 group">
+                                <button
+                                    onClick={() => handleAddDeal(stage.id)}
+                                    className="w-full py-2.5 rounded-xl border border-dashed border-border text-muted-foreground text-sm font-medium hover:bg-muted/50 hover:text-foreground hover:border-primary/30 transition-all flex items-center justify-center gap-2 group"
+                                >
                                     <Plus className="w-4 h-4 group-hover:scale-110 transition-transform" />
                                     Add Deal
                                 </button>
