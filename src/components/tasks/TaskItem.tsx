@@ -6,9 +6,10 @@ import { cn } from "@/lib/utils";
 
 interface TaskItemProps {
     task: Task;
+    onToggleStatus: (id: string) => void;
 }
 
-export function TaskItem({ task }: TaskItemProps) {
+export function TaskItem({ task, onToggleStatus }: TaskItemProps) {
     const priorityColor = {
         low: "text-slate-500",
         medium: "text-blue-500",
@@ -24,12 +25,14 @@ export function TaskItem({ task }: TaskItemProps) {
             isDone ? "opacity-60" : "hover:border-primary/20 hover:shadow-md"
         )}>
             {/* Checkbox Placeholder */}
-            <button className={cn(
-                "flex-shrink-0 w-6 h-6 rounded-full border-2 flex items-center justify-center transition-colors",
-                isDone
-                    ? "bg-primary border-primary text-primary-foreground"
-                    : "border-muted-foreground/30 hover:border-primary text-transparent"
-            )}>
+            <button
+                onClick={() => onToggleStatus(task.id)}
+                className={cn(
+                    "flex-shrink-0 w-6 h-6 rounded-full border-2 flex items-center justify-center transition-colors cursor-pointer",
+                    isDone
+                        ? "bg-primary border-primary text-primary-foreground"
+                        : "border-muted-foreground/30 hover:border-primary text-transparent"
+                )}>
                 {isDone ? <CheckCircle2 className="w-4 h-4" /> : <div className="w-4 h-4" />}
             </button>
 

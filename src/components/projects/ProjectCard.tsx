@@ -1,14 +1,15 @@
 "use client";
 
-import { Calendar, MoreHorizontal, Users, AlertCircle, CheckCircle2, Clock } from "lucide-react";
+import { Calendar, MoreHorizontal, Users, AlertCircle, CheckCircle2, Clock, Pencil, CheckSquare } from "lucide-react";
 import { Project } from "./data";
 import { cn } from "@/lib/utils";
 
 interface ProjectCardProps {
     project: Project;
+    onEdit?: (project: Project) => void;
 }
 
-export function ProjectCard({ project }: ProjectCardProps) {
+export function ProjectCard({ project, onEdit }: ProjectCardProps) {
     const statusConfig = {
         "on-track": { color: "text-emerald-500", bg: "bg-emerald-500/10", icon: CheckCircle2, label: "On Track" },
         "at-risk": { color: "text-amber-500", bg: "bg-amber-500/10", icon: AlertCircle, label: "At Risk" },
@@ -18,6 +19,9 @@ export function ProjectCard({ project }: ProjectCardProps) {
 
     const config = statusConfig[project.status];
     const StatusIcon = config.icon;
+
+    const completedSubtasks = project.subtasks?.filter(s => s.isCompleted).length || 0;
+    const totalSubtasks = project.subtasks?.length || 0;
 
     return (
         <div className="group p-5 rounded-xl bg-card border border-border/50 shadow-sm hover:shadow-md hover:border-primary/20 transition-all duration-300">
@@ -32,8 +36,12 @@ export function ProjectCard({ project }: ProjectCardProps) {
                     </div>
                     <h3 className="font-semibold text-lg text-foreground mb-1">{project.title}</h3>
                 </div>
-                <button className="text-muted-foreground hover:text-primary transition-colors">
-                    <MoreHorizontal className="w-5 h-5" />
+                <button
+                    onClick={() => onEdit?.(project)}
+                    className="text-muted-foreground hover:text-primary transition-colors p-1 hover:bg-muted rounded-md"
+                    title="Edit Project"
+                >
+                    <Pencil className="w-4 h-4" />
                 </button>
             </div>
 
@@ -41,17 +49,21 @@ export function ProjectCard({ project }: ProjectCardProps) {
                 {project.description}
             </p>
 
-            {/* Progress Bar */}
+            {/* Progress Bar & Subtask Info */}
             <div className="mb-6">
                 <div className="flex justify-between text-xs font-medium mb-2">
                     <span className="text-muted-foreground">Progress</span>
                     <span className="text-foreground">{project.progress}%</span>
                 </div>
-                <div className="h-2 w-full bg-muted rounded-full overflow-hidden">
+                <div className="h-2 w-full bg-muted rounded-full overflow-hidden mb-2">
                     <div
                         className="h-full bg-primary transition-all duration-500"
                         style={{ width: `${project.progress}%` }}
                     />
+                </div>
+                <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
+                    <CheckSquare className="w-3.5 h-3.5" />
+                    <span>{completedSubtasks} / {totalSubtasks} subtasks</span>
                 </div>
             </div>
 

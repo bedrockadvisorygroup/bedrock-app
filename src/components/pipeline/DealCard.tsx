@@ -6,9 +6,12 @@ import { cn } from "@/lib/utils";
 
 interface DealCardProps {
     deal: Deal;
+    onEdit: (deal: Deal) => void;
+    onDelete: (id: string) => void;
+    onDragStart: (e: React.DragEvent, id: string) => void;
 }
 
-export function DealCard({ deal, onEdit, onDelete }: DealCardProps & { onEdit: (deal: Deal) => void; onDelete: (id: string) => void }) {
+export function DealCard({ deal, onEdit, onDelete, onDragStart }: DealCardProps) {
     const priorityColor = {
         low: "bg-slate-500",
         medium: "bg-amber-500",
@@ -16,7 +19,11 @@ export function DealCard({ deal, onEdit, onDelete }: DealCardProps & { onEdit: (
     };
 
     return (
-        <div className="group relative p-4 rounded-xl bg-card border border-border/50 shadow-sm hover:shadow-md hover:border-primary/20 transition-all duration-300 cursor-default w-full">
+        <div
+            draggable
+            onDragStart={(e) => onDragStart(e, deal.id)}
+            className="group relative p-4 rounded-xl bg-card border border-border/50 shadow-sm hover:shadow-md hover:border-primary/20 transition-all duration-300 cursor-grab active:cursor-grabbing w-full"
+        >
             <div className="flex justify-between items-start mb-3">
                 <div className="flex flex-col">
                     <span className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-1">
@@ -51,7 +58,7 @@ export function DealCard({ deal, onEdit, onDelete }: DealCardProps & { onEdit: (
                     </div>
                     <span className="text-xs text-muted-foreground flex items-center gap-1">
                         <Calendar className="w-3 h-3" />
-                        {new Date(deal.dueDate).toLocaleDateString(undefined, { month: 'short', day: 'numeric' })}
+                        {new Date(deal.dueDate).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
                     </span>
                 </div>
 

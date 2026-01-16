@@ -1,0 +1,58 @@
+
+> bedrock-app@0.1.0 lint
+> eslint
+
+
+/Users/ruthvik/Documents/anti. gravity/src/app/dashboard/content/page.tsx
+  3:18  warning  'Filter' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/ruthvik/Documents/anti. gravity/src/app/dashboard/page.tsx
+   1:10  warning  'ArrowUpRight' is defined but never used                         @typescript-eslint/no-unused-vars
+  39:72  error    `'` can be escaped with `&apos;`, `&lsquo;`, `&#39;`, `&rsquo;`  react/no-unescaped-entities
+  39:79  error    `'` can be escaped with `&apos;`, `&lsquo;`, `&#39;`, `&rsquo;`  react/no-unescaped-entities
+
+/Users/ruthvik/Documents/anti. gravity/src/components/clients/ClientList.tsx
+   9:5  warning  'Calendar' is defined but never used      @typescript-eslint/no-unused-vars
+  10:5  warning  'ArrowUpRight' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/ruthvik/Documents/anti. gravity/src/components/layout/Header.tsx
+  3:24  warning  'User' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/ruthvik/Documents/anti. gravity/src/components/pipeline/DealCard.tsx
+  3:36  warning  'User' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/ruthvik/Documents/anti. gravity/src/components/pipeline/PipelineBoard.tsx
+  35:17  error  Error: Cannot call impure function during render
+
+`Math.random` is an impure function. Calling an impure function can produce unstable results that update unpredictably when the component happens to re-render. (https://react.dev/reference/rules/components-and-hooks-must-be-pure#components-and-hooks-must-be-idempotent).
+
+/Users/ruthvik/Documents/anti. gravity/src/components/pipeline/PipelineBoard.tsx:35:17
+  33 |     const handleAddDeal = (stageId: string) => {
+  34 |         const newDeal: Deal = {
+> 35 |             id: Math.random().toString(36).substr(2, 9),
+     |                 ^^^^^^^^^^^^^ Cannot call impure function
+  36 |             title: "New Potential Deal",
+  37 |             company: "New Client Ltd",
+  38 |             value: Math.floor(Math.random() * 50000) + 10000,  react-hooks/purity
+  38:31  error  Error: Cannot call impure function during render
+
+`Math.random` is an impure function. Calling an impure function can produce unstable results that update unpredictably when the component happens to re-render. (https://react.dev/reference/rules/components-and-hooks-must-be-pure#components-and-hooks-must-be-idempotent).
+
+/Users/ruthvik/Documents/anti. gravity/src/components/pipeline/PipelineBoard.tsx:38:31
+  36 |             title: "New Potential Deal",
+  37 |             company: "New Client Ltd",
+> 38 |             value: Math.floor(Math.random() * 50000) + 10000,
+     |                               ^^^^^^^^^^^^^ Cannot call impure function
+  39 |             stage: stageId as any,
+  40 |             owner: "You",
+  41 |             dueDate: new Date().toISOString().split('T')[0],    react-hooks/purity
+  39:31  error  Unexpected any. Specify a different type                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     @typescript-eslint/no-explicit-any
+
+/Users/ruthvik/Documents/anti. gravity/src/components/projects/ProjectCard.tsx
+  3:36  warning  'Users' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/ruthvik/Documents/anti. gravity/src/components/tasks/TaskItem.tsx
+  3:24  warning  'Circle' is defined but never used  @typescript-eslint/no-unused-vars
+
+✖ 13 problems (5 errors, 8 warnings)
+
